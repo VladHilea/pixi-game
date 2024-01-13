@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hilea Vlad - Reevo Assignment</title>
+    <!-- Link to the CSS bundle for your styles -->
+    <link rel="stylesheet" href="dist/styles.css">
+</head>
+<body>
+
+<div id="gameCanvas" class="canvas-div"></div>
+
+
+<!-- Add a "Pause" button with an ID for referencing it in JavaScript -->
+<button id="pauseButton">Pause</button>
+
+<!-- Add a "Resume" button with an ID for referencing it in JavaScript -->
+<div class="controls-cotnainer">
+    <div class="control">
+        <p>Control Gravity Factor (max. 10)</p>
+        <div class="actual-control">
+            <button id="gravityFactorMinusBtn">-</button>
+            <p id="gravityFactor">1</p>
+            <button id="gravityFactorPlusBtn">+</button>
+        </div>
+    </div>
+
+    <div class="control">
+        <p>Control Shapes/Second (max. 10)</p>
+        <div class="actual-control">
+            <button id="shapesPerSecondMinusBtn">-</button>
+            <p id="shapesPerSecond">1</p>
+            <button id="shapesPerSecondPlusBtn">+</button>
+        </div>
+    </div>
+</div>
+<!-- Webpack Bundle -->
+<script src="dist/bundle.js"></script>
+
+</body>
+</html>
