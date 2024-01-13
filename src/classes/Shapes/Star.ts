@@ -1,6 +1,5 @@
 import * as PIXI from 'pixi.js';
 import Shape from '../Shape';
-import {DivMaskDimensions} from '../../types';
 import Controller from "../Controller";
 
 // Custom function to draw a star shape

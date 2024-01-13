@@ -1,6 +1,5 @@
 import * as PIXI from 'pixi.js';
 import Shape from '../Shape';
-import { DivMaskDimensions } from '../../types';
 import Controller from "../Controller";
 
 class FiveSides extends Shape {
@@ -28,8 +27,7 @@ class FiveSides extends Shape {
 
     public calculateAreaInPx(): number {
         const angle = Math.PI / 5;
-        const area = (5 / 4) * (this.sideLength ** 2) * (1 / Math.tan(angle));
-        return area;
+        return (5 / 4) * (this.sideLength ** 2) * (1 / Math.tan(angle));
     }
 }
 

@@ -1,5 +1,4 @@
 import * as PIXI from 'pixi.js';
-import {DivMaskDimensions} from "../types";
 import Controller from "./Controller";
 
 class Shape {

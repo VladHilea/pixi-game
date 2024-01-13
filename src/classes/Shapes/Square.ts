@@ -1,8 +1,6 @@
 import * as PIXI from 'pixi.js';
 import Shape from '../Shape';
-import {DivMaskDimensions} from "../../types";
 import Controller from "../Controller";
-import circle from "./Circle";
 
 class Square extends Shape {
     public areaInPixels = 0;

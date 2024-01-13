@@ -70,31 +70,15 @@ function changeShapesPerSecond(increase: boolean): void {
 }
 
 function toggleDisabledControlGravity() {
-    if (pixiApp.controller.gravityFactor === 10) {
-        gravityFactorPlusBtn.disabled = true;
-    } else {
-        gravityFactorPlusBtn.disabled = false;
-    }
+    gravityFactorPlusBtn.disabled = pixiApp.controller.gravityFactor === 10;
 
-    if (pixiApp.controller.gravityFactor === 1) {
-        gravityFactorMinusBtn.disabled = true;
-    } else {
-        gravityFactorMinusBtn.disabled = false;
-    }
+    gravityFactorMinusBtn.disabled = pixiApp.controller.gravityFactor === 1;
 }
 
 function toggleDisabledControlShapes() {
-    if (pixiApp.controller.shapesPerSecond === 710) {
-        shapesPerSecondPlusBtn.disabled = true;
-    } else {
-        shapesPerSecondPlusBtn.disabled = false;
-    }
+    shapesPerSecondPlusBtn.disabled = pixiApp.controller.shapesPerSecond === 710;
 
-    if (pixiApp.controller.shapesPerSecond === 1) {
-        shapesPerSecondMinusBtn.disabled = true;
-    } else {
-        shapesPerSecondMinusBtn.disabled = false;
-    }
+    shapesPerSecondMinusBtn.disabled = pixiApp.controller.shapesPerSecond === 1;
 }
 
 
