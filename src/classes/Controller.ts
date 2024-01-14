@@ -58,13 +58,13 @@ class Controller {
         }
     }
 
-    public increaseShapeserSecond(): void {
+    public increaseShapesPerSecond(): void {
         if (this.shapesPerSecond < 10) {
             this.shapesPerSecond++;
         }
     }
 
-    public decreaseShapeserSecond(): void {
+    public decreaseShapesPerSecond(): void {
         if (this.shapesPerSecond > 1) {
             this.shapesPerSecond--;
         }

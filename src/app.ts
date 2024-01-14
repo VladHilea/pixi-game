@@ -1,8 +1,7 @@
-import PixiApp from './classes/PixiApp'; // Import the PixiApp class
+import PixiApp from './classes/PixiApp';
 
 // create an instance of PixiApp and start
 const pixiApp = new PixiApp();
-let isPaused = false;
 pixiApp.start();
 
 // get html buttons
@@ -37,16 +36,13 @@ document.addEventListener('visibilitychange', handleVisibilityChange);
 
 // top part button controllers
 function pauseResume() {
-    if (!isPaused) {
+    if (!pixiApp.controller.getIsPaused()) {
         pixiApp.pause()
-        isPaused = true;
         pauseButton.innerText = 'Resume';
         return;
     }
     pauseButton.innerText = 'Pause';
-
-    pixiApp.resume(); // Resume the PixiJS animation loop
-    isPaused = false;
+    pixiApp.resume();
 }
 
 function toggleHtmlText(): void {
@@ -73,10 +69,10 @@ function changeGravityFactor(increase: boolean): void {
 
 function changeShapesPerSecond(increase: boolean): void {
     if (increase) {
-        pixiApp.controller.increaseShapeserSecond();
+        pixiApp.controller.increaseShapesPerSecond();
         shapesPerSecond.innerText = String(pixiApp.controller.getShapesPerSecond());
     } else {
-        pixiApp.controller.decreaseShapeserSecond();
+        pixiApp.controller.decreaseShapesPerSecond();
         shapesPerSecond.innerText = String(pixiApp.controller.getShapesPerSecond());
     }
 
@@ -105,7 +101,6 @@ function updateHTMLTEXT(event: CustomEvent): void {
 // pause on change tab or minimize
 function handleVisibilityChange() {
     if (document.hidden) {
-        isPaused = false; // make isPaused=false so that it always triggers the pause part of the function
         pauseResume();
     }
 }
