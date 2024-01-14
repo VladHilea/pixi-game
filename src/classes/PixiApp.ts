@@ -10,7 +10,7 @@ import SixSides from "./Shapes/SixSides";
 import Star from "./Shapes/Star";
 import RandomShape from "./Shapes/RandomShape";
 import Controller from "./Controller";
-import {APP_CONSTANTS} from "../constants/Constants";
+import {getAPP_CONSTANTS} from "../constants/Constants";
 
 class PixiApp {
     public app: PIXI.Application;
@@ -38,15 +38,15 @@ class PixiApp {
         //initialize pixi text and add to stage
         this.numberOfShapesText = new PIXI.Text('Number of Shapes: 0', {
             fill: 0x000000, // Text color
-            fontSize: 18,  // Font size
+            fontSize: getAPP_CONSTANTS().TEXT_FONT_SIZE,  // Font size
         });
         this.areaOfShapesText = new PIXI.Text('Area of Shapes: 0px^2', {
             fill: 0x000000, // Text color
-            fontSize: 18,  // Font size
+            fontSize: getAPP_CONSTANTS().TEXT_FONT_SIZE,  // Font size
         });
         this.scoreText = new PIXI.Text('Score: 0', {
             fill: 0x000000, // Text color
-            fontSize: 18,  // Font size
+            fontSize: getAPP_CONSTANTS().TEXT_FONT_SIZE,  // Font size
         });
         this.numberOfShapesText.x = 10; // Adjust the x-coordinate as needed
         this.numberOfShapesText.y = 10; // Adjust the y-coordinate as needed
@@ -116,8 +116,8 @@ class PixiApp {
     private generateShape(): void {
 
         //I give an offset(left and right) so that the shapes will always be fully in the app view
-        const startX = this.getRandomNumber(APP_CONSTANTS.OUTER_CIRCLE_RADIUS_FOR_SHAPE_SIZE, this.app.renderer.width - APP_CONSTANTS.OUTER_CIRCLE_RADIUS_FOR_SHAPE_SIZE) // Random X position within the rectangle
-        const startY = APP_CONSTANTS.SHAPES_CREATE_POINT; //start above the rectangle canvas
+        const startX = this.getRandomNumber(getAPP_CONSTANTS().OUTER_CIRCLE_RADIUS_FOR_SHAPE_SIZE, this.app.renderer.width - getAPP_CONSTANTS().OUTER_CIRCLE_RADIUS_FOR_SHAPE_SIZE) // Random X position within the rectangle
+        const startY = getAPP_CONSTANTS().SHAPES_CREATE_POINT; //start above the rectangle canvas
 
         const availableShapes = [Triangle, Square, Rectangular, Circle, Ellipse, FiveSides, SixSides, Star];
 

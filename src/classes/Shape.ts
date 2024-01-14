@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
 import Controller from "./Controller";
-import {APP_CONSTANTS} from "../constants/Constants";
+import {getAPP_CONSTANTS} from "../constants/Constants";
 
 class Shape {
     public graphics: PIXI.Graphics;
@@ -53,7 +53,7 @@ class Shape {
             }
 
             // destroy the shape when it goes below the (canvas + offset)
-            if (this.graphics.y > this.app.renderer.height + APP_CONSTANTS.SHAPES_DESTROY_OFFSET_AFTER_APP_BOTTOM) {
+            if (this.graphics.y > this.app.renderer.height + getAPP_CONSTANTS().SHAPES_DESTROY_OFFSET_AFTER_APP_BOTTOM) {
                 this.destroy();
             }
         }

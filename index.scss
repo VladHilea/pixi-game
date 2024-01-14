@@ -1,4 +1,4 @@
-@import 'src/styles/main.scss';
+$mobile-or-tablet-width: 768px;
 
 html, body {
   margin: 0;
@@ -26,6 +26,10 @@ html, body {
     width: 80%;
     height: 40px;
 
+    @media (max-width: $mobile-or-tablet-width) {
+      height: auto;
+    }
+
     .text-fields {
       display: none;
       flex-direction: column;
@@ -36,6 +40,10 @@ html, body {
         margin: 0;
         font-size: 17px;
         font-weight: 600;
+
+        @media (max-width: $mobile-or-tablet-width) {
+          font-size: 14px;
+        }
       }
     }
 
@@ -43,9 +51,11 @@ html, body {
       margin-left: auto;
       display: flex;
       gap: 10px;
+      @media (max-width: $mobile-or-tablet-width) {
+        flex-direction: column-reverse;
+      }
     }
   }
-
 
   .controls-cotnainer {
     display: flex;
@@ -62,6 +72,10 @@ html, body {
       align-items: center;
       width: 100%;
 
+      @media (max-width: $mobile-or-tablet-width) {
+        font-size: 13px;
+      }
+
       .actual-control {
         display: flex;
         font-size: 15px;
@@ -69,6 +83,7 @@ html, body {
         height: 40px;
         gap: 10px;
         align-items: center;
+
 
         button {
           height: 35px;
@@ -87,6 +102,12 @@ html, body {
     border-radius: 5px;
     font-size: 15px;
     font-weight: 600;
+
+    @media (max-width: $mobile-or-tablet-width) {
+      font-size: 10px;
+      font-weight: 500;
+      padding: 5px;
+    }
 
     &.primary {
       background-color: green;
@@ -121,4 +142,7 @@ html, body {
     }
   }
 }
+
+
+
 

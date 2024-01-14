@@ -1,5 +1,5 @@
 import Shape from "./Shape";
-import * as _ from "lodash";
+import _ from "lodash";
 
 class Controller {
     private areaOccupied: number = 0;
