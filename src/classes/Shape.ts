@@ -39,10 +39,7 @@ class Shape {
     }
 
     public update(): void {
-        // Check if the shape's y position is within the centered div
-        //this.graphics.visible = this.graphics.y >= this.divMaskDimensions.divTop && this.graphics.y <= this.divMaskDimensions.divBottom;
-
-        // Update the position and velocity
+        // apply gravity
         this.graphics.y += this.controller.gravityFactor * 0.5 + 1; // to look better on UI
 
 

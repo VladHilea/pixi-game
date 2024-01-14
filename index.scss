@@ -17,6 +17,35 @@ html, body {
     z-index: 1;
   }
 
+  .top {
+    position: absolute;
+    top: 5%;
+    left: 10%;
+    display: flex;
+    width: 80%;
+    min-height: 40px;
+
+    .text-fields {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+
+      p {
+        margin: 0;
+        font-size: 17px;
+        font-weight: 600;
+      }
+    }
+
+    .buttons-top {
+      margin-left: auto;
+      display: flex;
+      gap: 10px;
+    }
+  }
+
+
   .controls-cotnainer {
     display: flex;
     align-items: center;

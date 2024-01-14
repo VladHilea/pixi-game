@@ -6,9 +6,23 @@ let isPaused = false;
 pixiApp.start();
 
 // Add event listeners to the buttons
-const pauseButton = document.getElementById('pauseButton') as HTMLElement;
+const pauseButton = document.getElementById('pauseButton') as HTMLButtonElement;
+const toggleHtmlTextFields = document.getElementById('toggleHtmlTextFields') as HTMLButtonElement;
+
+const textFields = document.getElementById('textFields') as HTMLElement;
 
 pauseButton?.addEventListener('click', pauseResume);
+
+function toggleHtmlText() {
+    console.log(textFields.style.display)
+    if (textFields.style.display === 'flex') {
+        textFields.style.display = 'none';
+        return;
+    }
+    textFields.style.display = 'flex';
+}
+
+toggleHtmlTextFields?.addEventListener('click', toggleHtmlText);
 
 const gravityFactorMinusBtn = document.getElementById('gravityFactorMinusBtn') as HTMLButtonElement;
 const gravityFactorPlusBtn = document.getElementById('gravityFactorPlusBtn') as HTMLButtonElement;
@@ -18,10 +32,21 @@ const shapesPerSecondMinusBtn = document.getElementById('shapesPerSecondMinusBtn
 const shapesPerSecondPlusBtn = document.getElementById('shapesPerSecondPlusBtn') as HTMLButtonElement;
 const shapesPerSecond = document.getElementById('shapesPerSecond') as HTMLElement;
 
+
+const numberOfVisibleShapesHTML = document.getElementById('numberOfVisibleShapes') as HTMLElement;
+const areaOfVisibleShapesHTML = document.getElementById('areaOfVisibleShapes') as HTMLElement;
 gravityFactorMinusBtn?.addEventListener('click', () => changeGravityFactor(false));
 gravityFactorPlusBtn?.addEventListener('click', () => changeGravityFactor(true));
 shapesPerSecondMinusBtn?.addEventListener('click', () => changeShapesPerSecond(false));
 shapesPerSecondPlusBtn?.addEventListener('click', () => changeShapesPerSecond(true));
+
+document.addEventListener('shapeListUpdated', (event: any) => updateHTMLTEXT(event))
+
+
+function updateHTMLTEXT(event: CustomEvent) {
+    numberOfVisibleShapesHTML.innerText = String(event.detail.numberOFVisibleShapes);
+    areaOfVisibleShapesHTML.innerText = String(Math.round(event.detail.areaInPixelsOfVisibleShapes));
+}
 
 
 //initialize controls with value

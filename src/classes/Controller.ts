@@ -26,11 +26,13 @@ class Controller {
     public addToListofVisibleShapes(shape:Shape) {
         this.increaseAreaOccupied(shape.areaInPixels);
         this.listOfVisibleShapes.push(shape);
+        this.emitToDOM();
     }
 
     public removeFromListOfVisibleShapes(shape:Shape) {
         this.decreaseAreaOccupied(shape.areaInPixels);
         _.remove(this.listOfVisibleShapes,{shapeId:shape.shapeId})
+        this.emitToDOM();
     }
 
     public increaseGravityFactor() {
@@ -55,6 +57,16 @@ class Controller {
         if (this.shapesPerSecond > 1) {
             this.shapesPerSecond --;
         }
+    }
+
+    private emitToDOM() {
+        const eventDetail = {
+            numberOFVisibleShapes: this.listOfVisibleShapes.length,
+            areaInPixelsOfVisibleShapes: this.areaOccupied
+        };
+
+        const event = new CustomEvent('shapeListUpdated', { detail: eventDetail });
+        document.dispatchEvent(event);
     }
 }
 
