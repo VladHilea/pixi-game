@@ -10,27 +10,27 @@ class RandomPolygon extends Shape {
     constructor(app: PIXI.Application, controller: Controller, shapeId: number, startX: number, startY: number) {
         super(app, controller, shapeId, startX, startY);
 
-        // Generate a random number of sides between 3 and 6
+        // generate a random number of sides between 4 and 9
         const numSides = Math.floor(Math.random() * 6) + 4;
 
         const equalAngleRad = (360 / numSides) * (Math.PI / 180);
         const angles = [];
         let totalAngle = 0;
 
-        //all angles but 2 are equal
+        // all angles but 2 are equal
         for (let i = 0; i < numSides - 2; i++) {
             const angle = equalAngleRad;
             angles.push(angle);
             totalAngle += angle;
         }
 
-        //calculate random last 2 angles
+        // calculate random last 2 angles
         const remainingAngleRad1 = (2 * Math.PI - totalAngle) * Math.random();
         const remainingAngleRad2 = 2 * Math.PI - totalAngle - remainingAngleRad1;
         angles.push(remainingAngleRad1);
         angles.push(remainingAngleRad2);
 
-        // Calculate the points of the polygon
+        // calculate the points of the polygon based on angles
         const polygonPoints = [];
         let currentAngle = 0;
 

@@ -59,7 +59,7 @@ class Controller {
     }
 
     public increaseShapesPerSecond(): void {
-        if (this.shapesPerSecond < 10) {
+        if (this.shapesPerSecond < 20) {
             this.shapesPerSecond++;
         }
     }
