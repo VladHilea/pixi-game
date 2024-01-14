@@ -1,7 +1,7 @@
 import * as PIXI from 'pixi.js';
 import Triangle from './Shapes/Triangle';
 import Rectangular from './Shapes/Rectangular';
-import {DivMaskDimensions} from "../types";
+import {DivMaskDimensions} from "../types/DivMaskDimensions";
 import Square from "./Shapes/Square";
 import Circle from "./Shapes/Circle";
 import Ellipse from "./Shapes/Ellipse";
