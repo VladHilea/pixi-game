@@ -8,6 +8,7 @@ class Controller {
     private score: number = 0;
     private gravityFactor: number = 1;
     private shapesPerSecond: number = 1;
+    private isPaused = false;
 
     public increaseAreaOccupied(area: number): void {
         this.areaOccupied += area;
@@ -102,6 +103,14 @@ class Controller {
 
     public getAreaOccupied(): number {
         return this.areaOccupied;
+    }
+
+    public setPause(newValue: boolean): void {
+        this.isPaused = newValue;
+    }
+
+    public getIsPaused(): boolean {
+        return this.isPaused;
     }
 }
 

@@ -76,7 +76,7 @@ class PixiApp {
 
         // @ts-ignore
         this.app.view.addEventListener('mousedown', (event) => {
-            this.handleCickCreateShapeOrRemoveShape(event);
+           if (!this.controller.getIsPaused()) this.handleCickCreateShapeOrRemoveShape(event);
         });
     }
 
@@ -102,6 +102,7 @@ class PixiApp {
     public pause(): void {
         this.app.ticker.stop();
         clearInterval(this.generateInterval)
+        this.controller.setPause(true);
     }
 
     //resume app
@@ -111,6 +112,7 @@ class PixiApp {
             for (let i = 0; i < this.controller.getShapesPerSecond(); i++)
                 this.generateShape();
         }, 1000);
+        this.controller.setPause(false);
     }
 
     private generateShape(): void {

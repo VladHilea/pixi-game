@@ -25,7 +25,7 @@ class Shape {
         // set up event listeners
         this.graphics.eventMode = 'static';
         this.graphics.on('pointerover', () => {
-            this.graphics.cursor = 'pointer';
+           if (!this.controller.getIsPaused()) this.graphics.cursor = 'pointer';
         });
         this.graphics.on('pointerout', () => {
             this.graphics.cursor = 'default';
