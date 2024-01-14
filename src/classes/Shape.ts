@@ -4,14 +4,14 @@ import {APP_CONSTANTS} from "../constants/Constants";
 
 class Shape {
     public graphics: PIXI.Graphics;
-    protected app: PIXI.Application;
     public shapeId: number;
-    public areaInPixels = 0;
-    public isVisible = false;
-    public controller: Controller;
-    private destroyed = false;
-    public height= 0;
+    public areaInPixels: number = 0;
+    public height: number = 0;
 
+    private isVisible: boolean = false;
+    private controller: Controller;
+    private isDestroyed: boolean = false;
+    private app: PIXI.Application;
 
     constructor(app: PIXI.Application, controller: Controller, shapeId: number, startX: number, startY: number) {
         this.app = app;
@@ -22,43 +22,38 @@ class Shape {
         this.shapeId = shapeId;
         this.controller = controller;
 
-        // Set up click event listener
+        // set up event listeners
         this.graphics.eventMode = 'static';
-
-        // Set cursor to hand pointer on hover
         this.graphics.on('pointerover', () => {
             this.graphics.cursor = 'pointer';
         });
-
-        // Reset cursor on pointerout
         this.graphics.on('pointerout', () => {
             this.graphics.cursor = 'default';
         });
 
+        // add to list in controller
         this.controller.addToAllList(this);
     }
 
     public update(): void {
         // apply gravity
-        this.graphics.y += this.controller.gravityFactor * 0.5 + 1; // to look better on UI
+        this.graphics.y += this.controller.getGravityFactor() * 0.5 + 1; // to look better with values form control on UI
 
-
-        if (!this.destroyed) {
-            //becomes visible
+        // optimise, only apply update before destruction
+        if (!this.isDestroyed) {
+            // becomes visible
             if (!this.isVisible && this.graphics.y + this.height > 0 && this.graphics.y < this.app.renderer.height) {
                 this.addOnVisibleList();
-               // console.log(this, ' entered view area')
             }
 
-            //becomes invisible
+            // not visible anymore
             if (this.isVisible && this.graphics.y > this.app.renderer.height) {
                 this.removeFromVisibleList();
-                //console.log(this, ' exited view area')
 
             }
 
-            // Destroy the shape when it goes below the canvas + 100
-            if ( this.graphics.y > this.app.renderer.height + APP_CONSTANTS.SHAPES_DESTROY_OFFSET_AFTER_APP_BOTTOM) {
+            // destroy the shape when it goes below the (canvas + offset)
+            if (this.graphics.y > this.app.renderer.height + APP_CONSTANTS.SHAPES_DESTROY_OFFSET_AFTER_APP_BOTTOM) {
                 this.destroy();
             }
         }
@@ -66,7 +61,7 @@ class Shape {
 
     public addOnVisibleList(): void {
         this.isVisible = true;
-        this.controller.addToListofVisibleShapes(this);
+        this.controller.addToListOfVisibleShapes(this);
     }
 
     public removeFromVisibleList(): void {
@@ -75,12 +70,10 @@ class Shape {
     }
 
     public destroy(): void {
-        this.destroyed = true;
+        this.isDestroyed = true;
         this.controller.removeFromAllList(this);
         this.app.stage.removeChild(this.graphics);
     }
-
-
 }
 
 export default Shape;

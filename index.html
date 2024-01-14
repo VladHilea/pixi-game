@@ -3,50 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <title>Hilea Vlad - Reevo Assignment</title>
-    <!-- Link to the CSS bundle for your styles -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&family=Roboto:wght@300;400;500;700&family=Russo+One&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="dist/styles.css">
 </head>
 <body>
 
+<!-- top part -->
 <div class="top">
     <div id="textFields" class="text-fields">
         <p>Number of visible shapes: <span id="numberOfVisibleShapes">0</span></p>
         <p>Area of visible shapes: <span id="areaOfVisibleShapes">0</span>px^2</p>
+        <p>Score: <span id="score">0</span></p>
     </div>
     <div class="buttons-top">
-        <button id="pauseButton">Pause</button>
+        <button id="pauseButton" class="btn warn">Pause</button>
 
-        <button id="toggleHtmlTextFields">Toggle Html Text Fields</button>
+        <button id="toggleHtmlTextFields" class="btn primary">Toggle Html Text Fields</button>
     </div>
 
 </div>
 
-
+<!-- game canvas div-->
 <div id="gameCanvas" class="canvas-div"></div>
 
 
-<!-- Add a "Resume" button with an ID for referencing it in JavaScript -->
+<!-- bottom part -->
 <div class="controls-cotnainer">
     <div class="control">
         <p>Control Gravity Factor (max. 10)</p>
         <div class="actual-control">
-            <button id="gravityFactorMinusBtn">-</button>
+            <button id="gravityFactorMinusBtn" class="btn info">-</button>
             <p id="gravityFactor">1</p>
-            <button id="gravityFactorPlusBtn">+</button>
+            <button id="gravityFactorPlusBtn" class="btn info">+</button>
         </div>
     </div>
 
     <div class="control">
-        <p>Control Shapes/Second (max. 10)</p>
+        <p>Control Shapes/Second (max. 20)</p>
         <div class="actual-control">
-            <button id="shapesPerSecondMinusBtn">-</button>
+            <button id="shapesPerSecondMinusBtn" class="btn info">-</button>
             <p id="shapesPerSecond">1</p>
-            <button id="shapesPerSecondPlusBtn">+</button>
+            <button id="shapesPerSecondPlusBtn" class="btn info">+</button>
         </div>
     </div>
 </div>
-<!-- Webpack Bundle -->
+<!-- Webpack -->
 <script src="dist/bundle.js"></script>
-
 </body>
 </html>

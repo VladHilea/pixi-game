@@ -2,11 +2,12 @@ import Shape from "./Shape";
 import * as _ from "lodash";
 
 class Controller {
-    public areaOccupied: number = 0;
-    public listOfVisibleShapes:Shape[] = [];
-    public listOfAllShapes:Shape[] = [];
-    public gravityFactor = 1;
-    public shapesPerSecond = 1;
+    private areaOccupied: number = 0;
+    private listOfAllShapes: Shape[] = [];
+    private listOfVisibleShapes: Shape[] = [];
+    private score: number = 0;
+    private gravityFactor: number = 1;
+    private shapesPerSecond: number = 1;
 
     public increaseAreaOccupied(area: number): void {
         this.areaOccupied += area;
@@ -16,57 +17,91 @@ class Controller {
         this.areaOccupied -= area;
     }
 
-    public addToAllList(shape:Shape){
+    public addToAllList(shape: Shape): void {
         this.listOfAllShapes.push(shape);
     }
 
-    public removeFromAllList(shape:Shape){
-        _.remove(this.listOfAllShapes,{shapeId:shape.shapeId})
+    public removeFromAllList(shape: Shape): void {
+        _.remove(this.listOfAllShapes, {shapeId: shape.shapeId})
     }
-    public addToListofVisibleShapes(shape:Shape) {
+
+    public addToListOfVisibleShapes(shape: Shape): void {
         this.increaseAreaOccupied(shape.areaInPixels);
         this.listOfVisibleShapes.push(shape);
         this.emitToDOM();
     }
 
-    public removeFromListOfVisibleShapes(shape:Shape) {
+    public removeFromListOfVisibleShapes(shape: Shape): void {
         this.decreaseAreaOccupied(shape.areaInPixels);
-        _.remove(this.listOfVisibleShapes,{shapeId:shape.shapeId})
+        _.remove(this.listOfVisibleShapes, {shapeId: shape.shapeId})
         this.emitToDOM();
     }
 
-    public increaseGravityFactor() {
+    public increaseScore(): void {
+        this.score++;
+    }
+
+    public decreaseScore(): void {
+        this.score--;
+    }
+
+    public increaseGravityFactor(): void {
         if (this.gravityFactor < 10) {
-            this.gravityFactor ++;
+            this.gravityFactor++;
         }
     }
 
-    public decreaseGravityFactor() {
+    public decreaseGravityFactor(): void {
         if (this.gravityFactor > 1) {
-            this.gravityFactor --;
+            this.gravityFactor--;
         }
     }
 
-    public increaseShapeserSecond() {
+    public increaseShapeserSecond(): void {
         if (this.shapesPerSecond < 10) {
-            this.shapesPerSecond ++;
+            this.shapesPerSecond++;
         }
     }
 
-    public decreaseShapeserSecond() {
+    public decreaseShapeserSecond(): void {
         if (this.shapesPerSecond > 1) {
-            this.shapesPerSecond --;
+            this.shapesPerSecond--;
         }
     }
 
-    private emitToDOM() {
+    private emitToDOM(): void {
         const eventDetail = {
             numberOFVisibleShapes: this.listOfVisibleShapes.length,
-            areaInPixelsOfVisibleShapes: this.areaOccupied
+            areaInPixelsOfVisibleShapes: this.areaOccupied,
+            score: this.score,
         };
 
-        const event = new CustomEvent('shapeListUpdated', { detail: eventDetail });
+        const event = new CustomEvent('shapeListUpdated', {detail: eventDetail});
         document.dispatchEvent(event);
+    }
+
+    public getScore(): number {
+        return this.score;
+    }
+
+    public getGravityFactor(): number {
+        return this.gravityFactor;
+    }
+
+    public getVisibleShapesList(): Shape[] {
+        return this.listOfVisibleShapes;
+    }
+
+    public getShapesPerSecond(): number {
+        return this.shapesPerSecond;
+    }
+
+    public getListOfAllShapes(): Shape[] {
+        return this.listOfAllShapes;
+    }
+
+    public getAreaOccupied(): number {
+        return this.areaOccupied;
     }
 }
 

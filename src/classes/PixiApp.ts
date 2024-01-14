@@ -17,14 +17,16 @@ class PixiApp {
     private divMaskDimensions!: DivMaskDimensions;
     private readonly numberOfShapesText!: PIXI.Text; // Text field for "Number of Shapes"
     private readonly areaOfShapesText!: PIXI.Text; // Text field for "Number of Shapes"
-    private shapeId = 1;
+    private readonly scoreText!: PIXI.Text; // Text field for "Number of Shapes"
+    private shapeId: number = 1;
     public generateInterval?: NodeJS.Timeout;
-
-    public controller = new Controller();
+    public controller: Controller = new Controller();
 
 
     constructor() {
         const canvasElement = document.getElementById('gameCanvas') as HTMLElement
+
+        //build the pixi app
         this.app = new PIXI.Application({
             width: canvasElement.getBoundingClientRect().width,
             height: canvasElement.getBoundingClientRect().height,
@@ -32,6 +34,8 @@ class PixiApp {
             resizeTo: canvasElement,
         });
 
+
+        //initialize pixi text and add to stage
         this.numberOfShapesText = new PIXI.Text('Number of Shapes: 0', {
             fill: 0x000000, // Text color
             fontSize: 18,  // Font size
@@ -40,13 +44,22 @@ class PixiApp {
             fill: 0x000000, // Text color
             fontSize: 18,  // Font size
         });
+        this.scoreText = new PIXI.Text('Score: 0', {
+            fill: 0x000000, // Text color
+            fontSize: 18,  // Font size
+        });
         this.numberOfShapesText.x = 10; // Adjust the x-coordinate as needed
         this.numberOfShapesText.y = 10; // Adjust the y-coordinate as needed
+        this.scoreText.x = 10; // Adjust the y-coordinate as needed
         this.areaOfShapesText.x = 10; // Adjust the x-coordinate as needed
         this.areaOfShapesText.y = 30; // Adjust the y-coordinate as needed
+        this.scoreText.y = 50; // Adjust the y-coordinate as needed
         this.app.stage.addChild(this.numberOfShapesText);
         this.app.stage.addChild(this.areaOfShapesText);
+        this.app.stage.addChild(this.scoreText);
 
+
+        //append the pixi app to the div
         canvasElement.appendChild(this.app.view as any);
 
 
@@ -63,38 +76,39 @@ class PixiApp {
 
         // @ts-ignore
         this.app.view.addEventListener('mousedown', (event) => {
-            this.createNewShapeOnCLick(event);
+            this.handleCickCreateShapeOrRemoveShape(event);
         });
-
-
     }
 
     public start(): void {
-        // Start generating shapes at a given frequency (1 shape per second)
+        // Start the app
         this.generateInterval = setInterval(() => {
-            for (let i = 0; i < this.controller.shapesPerSecond; i++)
+            for (let i = 0; i < this.controller.getShapesPerSecond(); i++)
                 this.generateShape();
         }, 1000);
 
         // Animation loop
         this.app.ticker.add(() => {
-            for (const shape of this.controller.listOfAllShapes) {
+            for (const shape of this.controller.getListOfAllShapes()) {
                 shape.update();
                 this.updateNumberOfShapesText();
                 this.updateAreaOfShapesText();
+                this.updateScore();
             }
         });
     }
 
-    public pause() {
+    //pause app
+    public pause(): void {
         this.app.ticker.stop();
         clearInterval(this.generateInterval)
     }
 
-    public resume() {
+    //resume app
+    public resume(): void {
         this.app.ticker.start();
         this.generateInterval = setInterval(() => {
-            for (let i = 0; i < this.controller.shapesPerSecond; i++)
+            for (let i = 0; i < this.controller.getShapesPerSecond(); i++)
                 this.generateShape();
         }, 1000);
     }
@@ -105,7 +119,6 @@ class PixiApp {
         const startX = this.getRandomNumber(APP_CONSTANTS.OUTER_CIRCLE_RADIUS_FOR_SHAPE_SIZE, this.app.renderer.width - APP_CONSTANTS.OUTER_CIRCLE_RADIUS_FOR_SHAPE_SIZE) // Random X position within the rectangle
         const startY = APP_CONSTANTS.SHAPES_CREATE_POINT; //start above the rectangle canvas
 
-        // Define an array of shape types
         const availableShapes = [Triangle, Square, Rectangular, Circle, Ellipse, FiveSides, SixSides, Star];
 
         // Randomly choose a shape type from the array
@@ -113,57 +126,57 @@ class PixiApp {
         new randomShapeType(this.app, this.controller, this.shapeId++, startX, startY);
     }
 
-    private createNewShapeOnCLick(event: any): void {
+    private handleCickCreateShapeOrRemoveShape(event: any): void {
 
-        //x and y are the point of the event - the positions of the div rectangle
+        // x and y are the point of the event - the positions of the div rectangle
         // x=0 is actually event.x - this.divMaskDimensions.divLeft
-        //y=0 is actually event.y - this.divMaskDimensions.divTop
+        // y=0 is actually event.y - this.divMaskDimensions.divTop
         const startX = event.x - this.divMaskDimensions.divLeft;
         const startY = event.y - this.divMaskDimensions.divTop;
 
         let isClickWithinShape = false;
 
-        //console.log(this.controller.listOfAllShapes)
         // Check if the click point is within any existing shape
-        for (const shape of this.controller.listOfAllShapes) {
+        for (const shape of this.controller.getVisibleShapesList()) {
             const shapeBounds = shape.graphics.getBounds();
             if (shapeBounds.contains(startX, startY)) {
                 isClickWithinShape = true;
                 shape.removeFromVisibleList();
                 shape.destroy();
-                break; // Exit the loop if the click is inside any shape
+                this.controller.increaseScore();
+                break;
             }
         }
 
+        // generate random shape if is click outside any shape
         if (!isClickWithinShape) {
             new RandomShape(this.app, this.controller, this.shapeId++, startX, startY);
+            this.controller.decreaseScore();
         }
     }
 
-
-    public stopGenerating(): void {
-        // Clear the interval to stop generating shapes
-        clearInterval(this.generateInterval);
+    private updateNumberOfShapesText(): void {
+        this.numberOfShapesText.text = `Number of Shapes: ${this.getNumberOfVisibleShape()}`;
     }
 
-    private updateNumberOfShapesText() {
-        this.numberOfShapesText.text = `Number of Shapes: ${this.getNumberOfShapesVisibleInBounds()}`;
-    }
-
-    private updateAreaOfShapesText() {
+    private updateAreaOfShapesText(): void {
         this.areaOfShapesText.text = `Area of Shapes: ${this.getTotalAreaOfVisibleShapes()}px^2`;
     }
 
-    private getNumberOfShapesVisibleInBounds(): number {
-        return this.controller.listOfVisibleShapes.length;
+    private updateScore(): void {
+        this.scoreText.text = `Score: ${this.controller.getScore()}`;
     }
 
-    private getTotalAreaOfVisibleShapes() {
-        return Math.round(this.controller.areaOccupied);
+    private getNumberOfVisibleShape(): number {
+        return this.controller.getVisibleShapesList().length;
     }
 
-    getRandomNumber(min: number, max: number) {
-        return   Math.floor(min + Math.random() * (max - min));
+    private getTotalAreaOfVisibleShapes(): number {
+        return Math.round(this.controller.getAreaOccupied());
+    }
+
+    getRandomNumber(min: number, max: number): number {
+        return Math.floor(min + Math.random() * (max - min));
     }
 }
 
