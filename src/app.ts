@@ -101,6 +101,7 @@ function updateHTMLTEXT(event: CustomEvent): void {
 // pause on change tab or minimize
 function handleVisibilityChange() {
     if (document.hidden) {
+        pixiApp.controller.setPause(false); // force set to false so the pauseResume() will apply correctly
         pauseResume();
     }
 }
