@@ -1,39 +1,30 @@
 import * as PIXI from 'pixi.js';
 import Controller from "./Controller";
+import {APP_CONSTANTS} from "../constants/Constants";
 
 class Shape {
     public graphics: PIXI.Graphics;
     protected app: PIXI.Application;
-    protected velocityY: number;
     public shapeId: number;
-    protected gravity: number;
-    protected startX: number;
-    protected startY: number;
     public areaInPixels = 0;
     public isVisible = false;
     public controller: Controller;
     private destroyed = false;
-    public height=0;
+    public height= 0;
 
 
-    constructor(app: PIXI.Application, controller: Controller, shapeId: number, startX: number, startY: number, velocityY: number, gravity: number) {
+    constructor(app: PIXI.Application, controller: Controller, shapeId: number, startX: number, startY: number) {
         this.app = app;
         this.graphics = new PIXI.Graphics();
         this.app.stage.addChild(this.graphics);
-        this.startX = startX;
-        this.startY = startY;
         this.graphics.x = startX;
         this.graphics.y = startY;
-        this.velocityY = velocityY;
-        this.gravity = gravity;
         this.shapeId = shapeId;
         this.controller = controller;
 
         // Set up click event listener
         this.graphics.eventMode = 'static';
-        // this.graphics.on('pointerdown', () => {
-        //     this.onClick();
-        // });
+
         // Set cursor to hand pointer on hover
         this.graphics.on('pointerover', () => {
             this.graphics.cursor = 'pointer';
@@ -47,14 +38,6 @@ class Shape {
         this.controller.addToAllList(this);
     }
 
-    // Define the click behavior (can be overridden in child classes)
-    protected onClick(): void {
-        if (!this.destroyed) {
-            this.removeFromVisibleList();
-            this.destroy();
-        }
-    }
-
     public update(): void {
         // Check if the shape's y position is within the centered div
         //this.graphics.visible = this.graphics.y >= this.divMaskDimensions.divTop && this.graphics.y <= this.divMaskDimensions.divBottom;
@@ -65,7 +48,7 @@ class Shape {
 
         if (!this.destroyed) {
             //becomes visible
-            if (!this.isVisible && this.graphics.y + this.height > 10 && this.graphics.y < this.app.renderer.height) {
+            if (!this.isVisible && this.graphics.y + this.height > 0 && this.graphics.y < this.app.renderer.height) {
                 this.addOnVisibleList();
                // console.log(this, ' entered view area')
             }
@@ -78,7 +61,7 @@ class Shape {
             }
 
             // Destroy the shape when it goes below the canvas + 100
-            if ( this.graphics.y > this.app.renderer.height + 100) {
+            if ( this.graphics.y > this.app.renderer.height + APP_CONSTANTS.SHAPES_DESTROY_OFFSET_AFTER_APP_BOTTOM) {
                 this.destroy();
             }
         }
@@ -86,12 +69,12 @@ class Shape {
 
     public addOnVisibleList(): void {
         this.isVisible = true;
-        this.controller.addToListShape(this);
+        this.controller.addToListofVisibleShapes(this);
     }
 
     public removeFromVisibleList(): void {
         this.isVisible = false;
-        this.controller.removeFromList(this);
+        this.controller.removeFromListOfVisibleShapes(this);
     }
 
     public destroy(): void {

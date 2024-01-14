@@ -1,6 +1,7 @@
 import * as PIXI from 'pixi.js';
 import Shape from '../Shape';
 import Controller from "../Controller";
+import {APP_CONSTANTS} from "../../constants/Constants";
 
 // Custom function to draw a star shape
 function drawStar(target: PIXI.Graphics, x: number, y: number, points: number, innerRadius: number, outerRadius: number, angle = 0) {
@@ -25,19 +26,18 @@ function drawStar(target: PIXI.Graphics, x: number, y: number, points: number, i
 }
 
 class Star extends Shape {
-    private circleRadius = 40;
-    private size = this.circleRadius;
+    private circleRadius = APP_CONSTANTS.OUTER_CIRCLE_RADIUS_FOR_SHAPE_SIZE;
     private innerRadius = this.circleRadius/2;
     public areaInPixels = 0;
     public height = 2 * this.circleRadius;
 
-    constructor(app: PIXI.Application,controller:Controller, shapeId: number, startX: number, startY: number, velocityY: number, gravity: number) {
-        super(app,controller, shapeId, startX, startY, velocityY, gravity);
+    constructor(app: PIXI.Application,controller:Controller, shapeId: number, startX: number, startY: number) {
+        super(app,controller, shapeId, startX, startY);
 
         // Create a star shape using the custom function
 
         this.graphics.beginFill(0xff9900); // Fill color (orange in this example)
-        drawStar(this.graphics, 100, 100, 5, this.innerRadius, this.size, 0);
+        drawStar(this.graphics, 100, 100, 5, this.innerRadius, this.circleRadius, 0);
         this.graphics.endFill();
 
         this.areaInPixels = this.calculateAreaInPx();

@@ -10,18 +10,17 @@ import SixSides from "./Shapes/SixSides";
 import Star from "./Shapes/Star";
 import RandomShape from "./Shapes/RandomShape";
 import Controller from "./Controller";
+import {APP_CONSTANTS} from "../constants/Constants";
 
 class PixiApp {
     public app: PIXI.Application;
     private divMaskDimensions!: DivMaskDimensions;
     private readonly numberOfShapesText!: PIXI.Text; // Text field for "Number of Shapes"
     private readonly areaOfShapesText!: PIXI.Text; // Text field for "Number of Shapes"
-    private shapeId=1;
+    private shapeId = 1;
     public generateInterval?: NodeJS.Timeout;
-    public DesktopMobileShapeSizeFactor = 30;
 
     public controller = new Controller();
-
 
 
     constructor() {
@@ -51,7 +50,7 @@ class PixiApp {
         canvasElement.appendChild(this.app.view as any);
 
 
-        // divMaskDimension set
+        // div position to use with on click mouse events
         this.divMaskDimensions = {
             divTop: canvasElement.getBoundingClientRect().top,
             divBottom: canvasElement.getBoundingClientRect().bottom,
@@ -68,23 +67,50 @@ class PixiApp {
         });
 
 
+    }
 
+    public start(): void {
+        // Start generating shapes at a given frequency (1 shape per second)
+        this.generateInterval = setInterval(() => {
+            for (let i = 0; i < this.controller.shapesPerSecond; i++)
+                this.generateShape();
+        }, 1000);
+
+        // Animation loop
+        this.app.ticker.add(() => {
+            for (const shape of this.controller.listOfAllShapes) {
+                shape.update();
+                this.updateNumberOfShapesText();
+                this.updateAreaOfShapesText();
+            }
+        });
+    }
+
+    public pause() {
+        this.app.ticker.stop();
+        clearInterval(this.generateInterval)
+    }
+
+    public resume() {
+        this.app.ticker.start();
+        this.generateInterval = setInterval(() => {
+            for (let i = 0; i < this.controller.shapesPerSecond; i++)
+                this.generateShape();
+        }, 1000);
     }
 
     private generateShape(): void {
 
-        //I give an offset(left and right) for the device relative sizes of the shapes, so they would always be inside the rectangle
-        const startX = this.getRandomNumber(this.DesktopMobileShapeSizeFactor, this.divMaskDimensions.width-this.DesktopMobileShapeSizeFactor) // Random X position within the rectangle
-        const startY = -300; //start above the rectangle canvas
-        const velocityY = 0.5; // Adjust the falling speed as needed
-        const gravity = 0.001; // Adjust the gravity factor as needed
-// Randomly choose triangle or rectangular shape
+        //I give an offset(left and right) so that the shapes will always be fully in the app view
+        const startX = this.getRandomNumber(APP_CONSTANTS.OUTER_CIRCLE_RADIUS_FOR_SHAPE_SIZE, this.app.renderer.width - APP_CONSTANTS.OUTER_CIRCLE_RADIUS_FOR_SHAPE_SIZE) // Random X position within the rectangle
+        const startY = APP_CONSTANTS.SHAPES_CREATE_POINT; //start above the rectangle canvas
+
         // Define an array of shape types
         const availableShapes = [Triangle, Square, Rectangular, Circle, Ellipse, FiveSides, SixSides, Star];
 
         // Randomly choose a shape type from the array
         const randomShapeType = availableShapes[Math.floor(Math.random() * availableShapes.length)];
-        new randomShapeType(this.app,this.controller, this.shapeId++, startX, startY, velocityY, gravity);
+        new randomShapeType(this.app, this.controller, this.shapeId++, startX, startY);
     }
 
     private createNewShapeOnCLick(event: any): void {
@@ -94,8 +120,6 @@ class PixiApp {
         //y=0 is actually event.y - this.divMaskDimensions.divTop
         const startX = event.x - this.divMaskDimensions.divLeft;
         const startY = event.y - this.divMaskDimensions.divTop;
-        const velocityY = 0.5; // Adjust the falling speed as needed
-        const gravity = 0.001; // Adjust the gravity factor as needed
 
         let isClickWithinShape = false;
 
@@ -112,27 +136,10 @@ class PixiApp {
         }
 
         if (!isClickWithinShape) {
-            new RandomShape(this.app,this.controller,this.shapeId++, startX, startY, velocityY, gravity);
+            new RandomShape(this.app, this.controller, this.shapeId++, startX, startY);
         }
     }
 
-
-    public start(): void {
-        // Start generating shapes at a given frequency (1 shape per second)
-        this.generateInterval = setInterval(() => {
-            for (let i = 0; i<this.controller.shapesPerSecond;i++)
-                this.generateShape();
-        }, 1000);
-
-        // Animation loop
-        this.app.ticker.add(() => {
-            for (const shape of this.controller.listOfAllShapes) {
-                shape.update();
-                this.updateNumberOfShapesText();
-                this.updateAreaOfShapesText();
-            }
-        });
-    }
 
     public stopGenerating(): void {
         // Clear the interval to stop generating shapes
@@ -148,60 +155,15 @@ class PixiApp {
     }
 
     private getNumberOfShapesVisibleInBounds(): number {
-        // const appScreenBounds = this.app.screen;
-        //
-        // let count = 0;
-        //
-        // for (const shape of this.shapes) {
-        //     const shapeBounds = shape.graphics.getBounds();
-        //
-        //     if (appScreenBounds.intersects(shapeBounds)) {
-        //         count++;
-        //     }
-        // }
-
-        return this.controller.listOfViewableShapes.length;
+        return this.controller.listOfVisibleShapes.length;
     }
 
     private getTotalAreaOfVisibleShapes() {
         return Math.round(this.controller.areaOccupied);
-        // const appScreenBounds = this.app.screen;
-        // let area = 0;
-        //
-        // for (const shape of this.shapes) {
-        //     const shapeBounds = shape.graphics.getBounds();
-        //
-        //     if (appScreenBounds.intersects(shapeBounds)) {
-        //         area = area + shape.areaInPixels;
-        //     }
-        // }
-        //
-        // return Math.round(area);
-
     }
 
-    pause() {
-        this.app.ticker.stop();
-        clearInterval(this.generateInterval)
-    }
-
-    resume() {
-        this.app.ticker.start();
-        this.generateInterval = setInterval(() => {
-            for (let i = 0; i<this.controller.shapesPerSecond;i++)
-                this.generateShape();
-        }, 1000);
-    }
-
-    getRandomNumber(min:number, max:number) {
-        // Generate a random number between 0 (inclusive) and 1 (exclusive)
-        const randomFraction = Math.random();
-
-        // Scale the random fraction to be within the range [min, max]
-        const randomInRange = min + randomFraction * (max - min);
-
-        // Round the result to an integer (you can remove this if you want decimal numbers)
-        return Math.floor(randomInRange);
+    getRandomNumber(min: number, max: number) {
+        return   Math.floor(min + Math.random() * (max - min));
     }
 }
 

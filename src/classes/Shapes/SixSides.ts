@@ -1,16 +1,17 @@
 import * as PIXI from 'pixi.js';
 import Shape from '../Shape';
 import Controller from "../Controller";
+import {APP_CONSTANTS} from "../../constants/Constants";
 
 class SixSides extends Shape {
 
-    private circleRadius = 40;
+    private circleRadius =  APP_CONSTANTS.OUTER_CIRCLE_RADIUS_FOR_SHAPE_SIZE;
     private sideLength = 2 * this.circleRadius / Math.sqrt(3);
     public areaInPixels = 0;
     public height = Math.sqrt(3) * this.sideLength;
 
-    constructor(app: PIXI.Application, controller: Controller, shapeId: number, startX: number, startY: number, velocityY: number, gravity: number) {
-        super(app, controller, shapeId, startX, startY, velocityY, gravity);
+    constructor(app: PIXI.Application, controller: Controller, shapeId: number, startX: number, startY: number) {
+        super(app, controller, shapeId, startX, startY);
 
         this.graphics.beginFill(0xffff00); // Fill color (yellow in this example)
         this.graphics.moveTo(this.sideLength, 0);

@@ -1,14 +1,15 @@
 import * as PIXI from 'pixi.js';
 import Shape from '../Shape';
 import Controller from "../Controller";
+import {APP_CONSTANTS} from "../../constants/Constants";
 
 class Circle extends Shape {
-    private radius = 40;
+    private radius =  APP_CONSTANTS.OUTER_CIRCLE_RADIUS_FOR_SHAPE_SIZE;
     public areaInPixels = 0;
     public height = this.radius * 2;
 
-    constructor(app: PIXI.Application, controller: Controller, shapeId: number, startX: number, startY: number, velocityY: number, gravity: number) {
-        super(app, controller, shapeId, startX, startY, velocityY, gravity);
+    constructor(app: PIXI.Application, controller: Controller, shapeId: number, startX: number, startY: number) {
+        super(app, controller, shapeId, startX, startY);
 
         // Create a circular shape (circle)
         this.graphics.beginFill(0xff0000); // Fill color (red in this example)

@@ -2,22 +2,11 @@ import Shape from "./Shape";
 import * as _ from "lodash";
 
 class Controller {
-    public visibleFields: number = 0;
     public areaOccupied: number = 0;
-    public listOfViewableShapes:Shape[] = [];
+    public listOfVisibleShapes:Shape[] = [];
     public listOfAllShapes:Shape[] = [];
-
     public gravityFactor = 1;
     public shapesPerSecond = 1;
-
-
-    public increaseVisibleFields(): void {
-        this.visibleFields++;
-    }
-
-    public decreaseVisibleFields(): void {
-        this.visibleFields--;
-    }
 
     public increaseAreaOccupied(area: number): void {
         this.areaOccupied += area;
@@ -29,22 +18,19 @@ class Controller {
 
     public addToAllList(shape:Shape){
         this.listOfAllShapes.push(shape);
-
     }
 
     public removeFromAllList(shape:Shape){
         _.remove(this.listOfAllShapes,{shapeId:shape.shapeId})
     }
-    public addToListShape(shape:Shape) {
-        //console.log(shape, 'Added To Viewable List Controller ');
+    public addToListofVisibleShapes(shape:Shape) {
         this.increaseAreaOccupied(shape.areaInPixels);
-        this.listOfViewableShapes.push(shape);
+        this.listOfVisibleShapes.push(shape);
     }
 
-    public removeFromList(shape:Shape) {
-        //console.log(shape, 'Deleted To Viewable List Controller ');
+    public removeFromListOfVisibleShapes(shape:Shape) {
         this.decreaseAreaOccupied(shape.areaInPixels);
-        _.remove(this.listOfViewableShapes,{shapeId:shape.shapeId})
+        _.remove(this.listOfVisibleShapes,{shapeId:shape.shapeId})
     }
 
     public increaseGravityFactor() {

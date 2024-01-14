@@ -1,14 +1,15 @@
 import * as PIXI from 'pixi.js';
 import Shape from '../Shape';
 import Controller from "../Controller";
+import {APP_CONSTANTS} from "../../constants/Constants";
 
 class RandomPolygon extends Shape {
-    private circleRadius = 40;
+    private circleRadius =  APP_CONSTANTS.OUTER_CIRCLE_RADIUS_FOR_SHAPE_SIZE;
     public areaInPixels = 0;
     public height = 2 * this.circleRadius;
 
-    constructor(app: PIXI.Application, controller: Controller, shapeId: number, startX: number, startY: number, velocityY: number, gravity: number) {
-        super(app, controller, shapeId, startX, startY, velocityY, gravity);
+    constructor(app: PIXI.Application, controller: Controller, shapeId: number, startX: number, startY: number) {
+        super(app, controller, shapeId, startX, startY);
 
         // Generate a random number of sides between 3 and 6
         const numSides = Math.floor(Math.random() * 6) + 4;

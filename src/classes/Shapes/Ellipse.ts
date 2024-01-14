@@ -1,15 +1,16 @@
 import * as PIXI from 'pixi.js';
 import Shape from '../Shape';
 import Controller from "../Controller";
+import {APP_CONSTANTS} from "../../constants/Constants";
 
 class Ellipse extends Shape {
-    private circleRadius = 40;
+    private circleRadius =  APP_CONSTANTS.OUTER_CIRCLE_RADIUS_FOR_SHAPE_SIZE;
     private width = this.circleRadius;
     public height = this.circleRadius - this.circleRadius/4;
     public areaInPixels = 0;
 
-    constructor(app: PIXI.Application,controller:Controller, shapeId: number, startX: number, startY: number, velocityY: number, gravity: number) {
-        super(app,controller, shapeId, startX, startY, velocityY, gravity);
+    constructor(app: PIXI.Application,controller:Controller, shapeId: number, startX: number, startY: number) {
+        super(app,controller, shapeId, startX, startY);
 
 
         // Create an ellipse shape
