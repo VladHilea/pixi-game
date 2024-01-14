@@ -6,7 +6,6 @@ import {getAPP_CONSTANTS} from "../../constants/Constants";
 class RandomPolygon extends Shape {
     private circleRadius =  getAPP_CONSTANTS().OUTER_CIRCLE_RADIUS_FOR_SHAPE_SIZE;
     public areaInPixels = 0;
-    public height = 2 * this.circleRadius;
 
     constructor(app: PIXI.Application, controller: Controller, shapeId: number, startX: number, startY: number) {
         super(app, controller, shapeId, startX, startY);

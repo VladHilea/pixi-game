@@ -8,7 +8,6 @@ class SixSides extends Shape {
     private circleRadius =  getAPP_CONSTANTS().OUTER_CIRCLE_RADIUS_FOR_SHAPE_SIZE;
     private sideLength = 2 * this.circleRadius / Math.sqrt(3);
     public areaInPixels = 0;
-    public height = Math.sqrt(3) * this.sideLength;
 
     constructor(app: PIXI.Application, controller: Controller, shapeId: number, startX: number, startY: number) {
         super(app, controller, shapeId, startX, startY);

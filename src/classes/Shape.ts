@@ -6,7 +6,6 @@ class Shape {
     public graphics: PIXI.Graphics;
     public shapeId: number;
     public areaInPixels: number = 0;
-    public height: number = 0;
 
     private isVisible: boolean = false;
     private controller: Controller;
@@ -42,14 +41,15 @@ class Shape {
         // optimise, only apply update before destruction
         if (!this.isDestroyed) {
             // becomes visible
-            if (!this.isVisible && this.graphics.y + this.height > 0 && this.graphics.y < this.app.renderer.height) {
+            if (!this.isVisible && this.graphics.y + this.graphics.height > 0 && this.graphics.y < this.app.renderer.height) {
                 this.addOnVisibleList();
             }
 
             // not visible anymore
             if (this.isVisible && this.graphics.y > this.app.renderer.height) {
+                console.log(this.graphics.y)
+                console.log(this.app.renderer.height)
                 this.removeFromVisibleList();
-
             }
 
             // destroy the shape when it goes below the (canvas + offset)

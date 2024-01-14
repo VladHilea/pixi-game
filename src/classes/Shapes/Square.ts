@@ -7,7 +7,6 @@ class Square extends Shape {
     public areaInPixels = 0;
     public circleRadius =  getAPP_CONSTANTS().OUTER_CIRCLE_RADIUS_FOR_SHAPE_SIZE;
     private sideLength = 2 * this.circleRadius / Math.sqrt(2);
-    public height = 2 * this.sideLength;
 
     constructor(app: PIXI.Application, controller: Controller, shapeId: number, startX: number, startY: number) {
         super(app, controller, shapeId, startX, startY);

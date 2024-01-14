@@ -6,7 +6,6 @@ import {getAPP_CONSTANTS} from "../../constants/Constants";
 class Circle extends Shape {
     private radius: number = getAPP_CONSTANTS().OUTER_CIRCLE_RADIUS_FOR_SHAPE_SIZE;
     public areaInPixels: number = 0;
-    public height: number = this.radius * 2;
 
     constructor(app: PIXI.Application, controller: Controller, shapeId: number, startX: number, startY: number) {
         super(app, controller, shapeId, startX, startY);
